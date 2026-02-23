@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
     return (
@@ -10,29 +11,20 @@ export default function Header() {
             </button>
 
             {/* Center Logo Area */}
-            {/* Replacing the missing logo with a stylized SVG that loosely resembles the loop from the design */}
             <Link href="/" className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity" aria-label="Home">
-                <svg
-                    width="40"
-                    height="24"
-                    viewBox="0 0 40 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-white"
-                >
-                    <path
-                        d="M20 12C20 12 18 20 12 20C6 20 2 16 2 10C2 4 10 2 16 8L24 16C30 22 38 20 38 14C38 8 34 4 28 4C22 4 20 12 20 12Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                </svg>
+                <Image
+                    src="/assets/logos/clica-logo.png"
+                    alt="Clica Seguros Logo"
+                    width={150}
+                    height={40}
+                    className="h-8 md:h-10 w-auto object-contain"
+                    priority
+                />
             </Link>
 
             {/* Right Investors Link */}
-            <Link href="/investors" className="text-sm font-medium tracking-wide flex items-center gap-1 hover:opacity-80 transition-opacity">
-                Investors
+            <Link href="/simulador" className="text-sm font-medium tracking-wide flex items-center gap-1 hover:opacity-80 transition-opacity">
+                Simulador
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="7" y1="17" x2="17" y2="7"></line>
                     <polyline points="7 7 17 7 17 17"></polyline>

@@ -10,7 +10,7 @@ export default function Home() {
       {/* Bottom section matching the image pixel-perfect */}
       <section className="flex-1 flex items-center justify-center py-10 min-h-[15vh]">
         <p className="text-white text-xs sm:text-sm font-medium tracking-wide">
-          The future of aviation is coming soon.
+          A primeira plataforma de seguros self-service do Brasil.
         </p>
       </section>
     </div>

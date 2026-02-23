@@ -12,9 +12,9 @@ export default function Hero() {
 
             {/* Hero Text */}
             <div className="relative z-20 text-center px-6 antialiased">
-                <h1 className="text-white text-[12vw] sm:text-7xl md:text-8xl lg:text-[110px] xl:text-[130px] font-bold leading-[0.95] tracking-[-0.04em] md:tracking-[-0.06em]">
-                    <span className="block">Skip traffic.</span>
-                    <span className="block">Time to fly.</span>
+                <h1 className="text-white text-[10vw] sm:text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] font-bold leading-[0.95] tracking-[-0.04em] md:tracking-[-0.05em]">
+                    <span className="block">Simule. Compare.</span>
+                    <span className="block">Economize.</span>
                 </h1>
             </div>
         </section>
