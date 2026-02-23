@@ -15,6 +15,13 @@ export default function HorizontalSection() {
     const text1Ref = useRef<HTMLDivElement>(null);
     const text2Ref = useRef<HTMLDivElement>(null);
     const text3Ref = useRef<HTMLDivElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
+    const ctaWordsRef = useRef<(HTMLSpanElement | null)[]>([]);
+    const ctaButtonRef = useRef<HTMLAnchorElement>(null);
+    const blogRef = useRef<HTMLDivElement>(null);
+    const blogCardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+    const blogHeadingRef = useRef<HTMLHeadingElement>(null);
+    const blogButtonRef = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -25,7 +32,14 @@ export default function HorizontalSection() {
         const txt1 = text1Ref.current;
         const txt2 = text2Ref.current;
         const txt3 = text3Ref.current;
-        if (!container || !headline || !img1 || !img2 || !img3 || !txt1 || !txt2 || !txt3) return;
+        const cta = ctaRef.current;
+        const ctaButton = ctaButtonRef.current;
+        const ctaWords = ctaWordsRef.current.filter(Boolean) as HTMLSpanElement[];
+        const blog = blogRef.current;
+        const blogHeading = blogHeadingRef.current;
+        const blogButton = blogButtonRef.current;
+        const blogCards = blogCardsRef.current.filter(Boolean) as HTMLAnchorElement[];
+        if (!container || !headline || !img1 || !img2 || !img3 || !txt1 || !txt2 || !txt3 || !cta || !ctaButton || !blog || !blogHeading || !blogButton) return;
 
         const viewH = container.offsetHeight;
         const imgWidth = container.offsetWidth * 0.48;
@@ -60,6 +74,15 @@ export default function HorizontalSection() {
         });
         // Texts hidden
         gsap.set([txt1, txt2, txt3], { opacity: 0, y: 20 });
+        // CTA hidden
+        gsap.set(cta, { opacity: 0 });
+        gsap.set(ctaWords, { opacity: 0.15, fontWeight: 300 });
+        gsap.set(ctaButton, { opacity: 0, y: 20 });
+        // Blog hidden
+        gsap.set(blog, { opacity: 0 });
+        gsap.set(blogHeading, { opacity: 0, y: 40 });
+        gsap.set(blogButton, { opacity: 0, y: 20 });
+        gsap.set(blogCards, { opacity: 0, y: 60 });
 
         // Headline exits via separate ScrollTrigger
         gsap.to(headline, {
@@ -76,7 +99,7 @@ export default function HorizontalSection() {
             scrollTrigger: {
                 trigger: container,
                 start: "top top",
-                end: "+=1200%",
+                end: "+=2200%",
                 pin: true,
                 scrub: 0.5,
                 markers: true,
@@ -195,8 +218,82 @@ export default function HorizontalSection() {
             duration: 0.05, ease: "power2.out",
         }, 0.61);
 
-        // Hold final state (0.66 → 1.0)
-        tl.to({}, { duration: 0.34 }, 0.66);
+        // Hold image 3 + text 3 (0.61 → 0.68)
+        tl.to({}, { duration: 0.07 }, 0.61);
+
+        // Fade out text 3 (0.68 → 0.70)
+        tl.to(txt3, {
+            opacity: 0, y: -20,
+            duration: 0.02, ease: "power2.in",
+        }, 0.68);
+
+        // Fade out all images and bottom labels (0.70 → 0.74)
+        tl.to([img1, img2, img3], {
+            opacity: 0, duration: 0.04, ease: "power2.in",
+        }, 0.70);
+
+        // ============================================================
+        // CTA PHASE (0.74 → 1.0)
+        // ============================================================
+
+        // Show CTA container
+        tl.set(cta, { opacity: 1 }, 0.74);
+
+        // Reveal words one by one (0.74 → 0.92)
+        ctaWords.forEach((word, i) => {
+            tl.to(word, {
+                opacity: 1, fontWeight: 800,
+                duration: 0.008, ease: "none",
+            }, 0.74 + i * 0.008);
+        });
+
+        // Button fades in (0.92 → 0.96)
+        tl.to(ctaButton, {
+            opacity: 1, y: 0,
+            duration: 0.04, ease: "power2.out",
+        }, 0.92);
+
+        // Hold CTA (0.92 → 0.96)
+        tl.to({}, { duration: 0.04 }, 0.92);
+
+        // ============================================================
+        // CTA → BLOG TRANSITION (0.96 → 1.0)
+        // ============================================================
+
+        // Fade out CTA (0.96 → 1.0)
+        tl.to(cta, {
+            opacity: 0, duration: 0.04, ease: "power2.in",
+        }, 0.96);
+
+        // ============================================================
+        // BLOG PHASE (1.0 → 1.28)
+        // ============================================================
+
+        // Show blog container
+        tl.set(blog, { opacity: 1 }, 1.0);
+
+        // Blog heading slides in (1.0 → 1.06)
+        tl.to(blogHeading, {
+            opacity: 1, y: 0,
+            duration: 0.06, ease: "power2.out",
+        }, 1.0);
+
+        // Blog "Ver todas" button fades in (1.04 → 1.08)
+        tl.to(blogButton, {
+            opacity: 1, y: 0,
+            duration: 0.04, ease: "power2.out",
+        }, 1.04);
+
+        // Blog cards stagger in (1.06 → 1.16)
+        blogCards.forEach((card, i) => {
+            tl.to(card, {
+                opacity: 1, y: 0,
+                duration: 0.05, ease: "power2.out",
+            }, 1.06 + i * 0.03);
+        });
+
+        // Hold blog (1.16 → 1.28)
+        tl.to({}, { duration: 0.12 }, 1.16);
 
         // Force ScrollTrigger to recalculate after Hero's pin spacer is in the DOM
         const raf = requestAnimationFrame(() => {
@@ -267,6 +364,100 @@ export default function HorizontalSection() {
                 <a className="text-[#1a1a2e] text-5xl font-bold italic underline underline-offset-4 cursor-pointer hover:opacity-70 transition-opacity">
                     Saiba mais
                 </a>
+            </div>
+
+            {/* CTA overlay */}
+            <div
+                ref={ctaRef}
+                className="absolute inset-0 flex flex-col items-center justify-center z-30 px-8 bg-[#0d84ff]"
+            >
+                <p className="text-white text-3xl md:text-5xl lg:text-6xl leading-snug md:leading-tight italic tracking-[-0.02em] text-center max-w-[900px] font-[var(--font-geist-sans)]">
+                    {[
+                        "Imagine", "não", "se", "preocupar", "com", "burocracia.",
+                        "E", "esquecer", "o", "que", "é", "pagar", "caro",
+                        "por", "seguro.", "Quando", "comparar", "é", "simples,",
+                        "tudo", "é", "possível.",
+                    ].map((word, i) => (
+                        <span
+                            key={i}
+                            ref={el => { ctaWordsRef.current[i] = el; }}
+                            style={{ fontWeight: 300 }}
+                        >
+                            {word}{" "}
+                        </span>
+                    ))}
+                </p>
+                <a
+                    ref={ctaButtonRef}
+                    href="/simulador"
+                    className="mt-12 inline-block bg-white text-[#0d84ff] text-sm font-medium tracking-wide px-8 py-4 rounded-full hover:bg-white/90 transition-colors"
+                >
+                    Simule seu seguro
+                </a>
+            </div>
+
+            {/* Blog overlay */}
+            <div
+                ref={blogRef}
+                className="absolute inset-0 z-30 px-8 md:px-12 flex flex-col justify-center"
+            >
+                {/* Header row */}
+                <div className="flex items-start justify-between mb-10 md:mb-14">
+                    <h2
+                        ref={blogHeadingRef}
+                        className="text-[#1a1a2e] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.05] tracking-[-0.02em]"
+                    >
+                        Notícias do mundo<br />dos seguros
+                    </h2>
+                    <a
+                        ref={blogButtonRef}
+                        href="/blog"
+                        className="shrink-0 ml-8 mt-2 inline-block bg-[#1a1a2e] text-white text-sm font-medium tracking-wide px-6 py-3 rounded-full hover:bg-[#2a2a3e] transition-colors"
+                    >
+                        Ver todas
+                    </a>
+                </div>
+
+                {/* Cards grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    {[
+                        {
+                            date: "Fev 15, 2026",
+                            title: "Como Escolher o Seguro Auto Ideal Sem Pagar Mais do Que Precisa",
+                            image: "/assets/slide-01.png",
+                        },
+                        {
+                            date: "Jan 29, 2026",
+                            title: "Seguro Residencial: O Que Cobre e Por Que Você Precisa de Um",
+                            image: "/assets/slide-02.png",
+                        },
+                        {
+                            date: "Jan 7, 2026",
+                            title: "Clica Seguros Expande Parcerias com Novas Seguradoras em Todo o Brasil",
+                            image: "/assets/slide-04.png",
+                        },
+                    ].map((post, i) => (
+                        <a
+                            key={i}
+                            href="#"
+                            ref={el => { blogCardsRef.current[i] = el; }}
+                            className="group block"
+                        >
+                            <span className="text-[#1a1a2e]/50 text-[13px] font-medium">
+                                {post.date}
+                            </span>
+                            <h3 className="text-[#1a1a2e] text-lg md:text-xl font-medium leading-snug mt-2 mb-4 group-hover:opacity-70 transition-opacity">
+                                {post.title}
+                            </h3>
+                            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg">
+                                <div
+                                    className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                                    style={{ backgroundImage: `url('${post.image}')` }}
+                                />
+                            </div>
+                        </a>
+                    ))}
+                </div>
             </div>
 
             <div className="absolute bottom-6 left-8 md:bottom-8 md:left-12 z-20">
