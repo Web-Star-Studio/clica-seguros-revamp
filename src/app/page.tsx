@@ -1,18 +1,13 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import HorizontalSection from "@/components/HorizontalSection";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0d84ff] flex flex-col font-sans">
       <Header />
       <Hero />
-
-      {/* Bottom section matching the image pixel-perfect */}
-      <section className="flex-1 flex items-center justify-center py-10 min-h-[15vh]">
-        <p className="text-white text-xs sm:text-sm font-medium tracking-wide">
-          A primeira plataforma de seguros self-service do Brasil.
-        </p>
-      </section>
+      <HorizontalSection />
     </div>
   );
 }
