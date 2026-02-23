@@ -66,12 +66,12 @@ export default function Header() {
     return (
         <>
             {/* Persistent Header */}
-            <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-8 md:px-10 md:py-10 text-white mix-blend-difference">
+            <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-8 md:px-10 md:py-10 text-white mix-blend-difference pointer-events-none">
                 {/* Left Menu Button */}
                 <button
                     onClick={toggleMenu}
                     aria-label={isOpen ? "Close Menu" : "Open Menu"}
-                    className="flex items-center gap-4 cursor-pointer group hover:opacity-80 transition-opacity z-50 min-w-[80px]"
+                    className="flex items-center gap-4 cursor-pointer group hover:opacity-80 transition-opacity z-50 min-w-[80px] pointer-events-auto"
                 >
                     {isOpen ? (
                         <>
@@ -89,7 +89,7 @@ export default function Header() {
                 {/* Center Logo Area */}
                 <Link
                     href="/"
-                    className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity z-50"
+                    className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity z-50 pointer-events-auto"
                     aria-label="Home"
                     onClick={() => setIsOpen(false)}
                 >
@@ -106,7 +106,7 @@ export default function Header() {
                 {/* Right Simulador Link */}
                 <Link
                     href="/simulador"
-                    className="text-sm font-medium tracking-wide flex items-center gap-1 hover:opacity-80 transition-opacity z-50"
+                    className="text-sm font-medium tracking-wide flex items-center gap-1 hover:opacity-80 transition-opacity z-50 pointer-events-auto"
                     onClick={() => setIsOpen(false)}
                 >
                     Simulador
