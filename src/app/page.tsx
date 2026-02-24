@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HorizontalSection from "@/components/HorizontalSection";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Header />
       <Hero />
       <HorizontalSection />
+      <ScrollToTop />
     </div>
   );
 }
