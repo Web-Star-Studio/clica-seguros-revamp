@@ -3,10 +3,12 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HorizontalSection() {
+    const router = useRouter();
     const containerRef = useRef<HTMLDivElement>(null);
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const image1Ref = useRef<HTMLDivElement>(null);
@@ -22,6 +24,13 @@ export default function HorizontalSection() {
     const blogCardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
     const blogHeadingRef = useRef<HTMLHeadingElement>(null);
     const blogButtonRef = useRef<HTMLAnchorElement>(null);
+    const saibaMaisButtonClass =
+        "group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-[#1a1a2e]/20 bg-white px-5 py-2.5 text-[1.05rem] font-bold italic leading-none tracking-[0.01em] text-[#1a1a2e] transition-[color,border-color,transform] duration-300 ease-out hover:text-white hover:border-[#0d84ff]/70 focus-visible:text-white focus-visible:border-[#0d84ff]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0d84ff]/30 active:translate-y-px";
+    const saibaMaisLayerBaseClass =
+        "pointer-events-none absolute inset-0 -translate-x-[104%] transform-gpu transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-focus-visible:translate-x-0";
+    const handleSaibaMaisClick = () => {
+        router.push("/simulador");
+    };
 
     useEffect(() => {
         const container = containerRef.current;
@@ -73,13 +82,13 @@ export default function HorizontalSection() {
             opacity: 0, zIndex: 3,
         });
         // Texts hidden
-        gsap.set([txt1, txt2, txt3], { opacity: 0, y: 20 });
+        gsap.set([txt1, txt2, txt3], { opacity: 0, y: 20, pointerEvents: "none" });
         // CTA hidden
-        gsap.set(cta, { opacity: 0 });
+        gsap.set(cta, { opacity: 0, pointerEvents: "none" });
         gsap.set(ctaWords, { opacity: 0.15, fontWeight: 300 });
         gsap.set(ctaButton, { opacity: 0, y: 20 });
         // Blog hidden
-        gsap.set(blog, { opacity: 0 });
+        gsap.set(blog, { opacity: 0, pointerEvents: "none" });
         gsap.set(blogHeading, { opacity: 0, y: 40 });
         gsap.set(blogButton, { opacity: 0, y: 20 });
         gsap.set(blogCards, { opacity: 0, y: 60 });
@@ -117,6 +126,7 @@ export default function HorizontalSection() {
         }, 0);
 
         // Text 1 fades in (0.09 → 0.14)
+        tl.set(txt1, { pointerEvents: "auto" }, 0.09);
         tl.to(txt1, {
             opacity: 1, y: 0,
             duration: 0.05, ease: "power2.out",
@@ -135,6 +145,7 @@ export default function HorizontalSection() {
             opacity: 0, y: -20,
             duration: 0.02, ease: "power2.in",
         }, 0.18);
+        tl.set(txt1, { pointerEvents: "none" }, 0.2);
 
         // Image 1: switch to top-left positioning (0.20)
         tl.set(img1, {
@@ -162,6 +173,7 @@ export default function HorizontalSection() {
         // ============================================================
 
         // Text 2 fades in (0.33 → 0.38)
+        tl.set(txt2, { pointerEvents: "auto" }, 0.33);
         tl.to(txt2, {
             opacity: 1, y: 0,
             duration: 0.05, ease: "power2.out",
@@ -180,6 +192,7 @@ export default function HorizontalSection() {
             opacity: 0, y: -20,
             duration: 0.02, ease: "power2.in",
         }, 0.46);
+        tl.set(txt2, { pointerEvents: "none" }, 0.48);
 
         // Image 1 thumbnail fades out (0.48)
         tl.to(img1, { opacity: 0, duration: 0.02 }, 0.48);
@@ -213,6 +226,7 @@ export default function HorizontalSection() {
         // ============================================================
 
         // Text 3 fades in (0.61 → 0.66)
+        tl.set(txt3, { pointerEvents: "auto" }, 0.61);
         tl.to(txt3, {
             opacity: 1, y: 0,
             duration: 0.05, ease: "power2.out",
@@ -226,6 +240,7 @@ export default function HorizontalSection() {
             opacity: 0, y: -20,
             duration: 0.02, ease: "power2.in",
         }, 0.68);
+        tl.set(txt3, { pointerEvents: "none" }, 0.70);
 
         // Fade out all images and bottom labels (0.70 → 0.74)
         tl.to([img1, img2, img3], {
@@ -237,7 +252,7 @@ export default function HorizontalSection() {
         // ============================================================
 
         // Show CTA container
-        tl.set(cta, { opacity: 1 }, 0.74);
+        tl.set(cta, { opacity: 1, pointerEvents: "auto" }, 0.74);
 
         // Reveal words one by one (0.74 → 0.92)
         ctaWords.forEach((word, i) => {
@@ -264,13 +279,14 @@ export default function HorizontalSection() {
         tl.to(cta, {
             opacity: 0, duration: 0.04, ease: "power2.in",
         }, 0.96);
+        tl.set(cta, { pointerEvents: "none" }, 1.0);
 
         // ============================================================
         // BLOG PHASE (1.0 → 1.28)
         // ============================================================
 
         // Show blog container
-        tl.set(blog, { opacity: 1 }, 1.0);
+        tl.set(blog, { opacity: 1, pointerEvents: "auto" }, 1.0);
 
         // Blog heading slides in (1.0 → 1.06)
         tl.to(blogHeading, {
@@ -341,9 +357,12 @@ export default function HorizontalSection() {
                 <p className="text-[#1a1a2e]/80 text-5xl font-bold leading-tight mb-4">
                     Compare dezenas de seguradoras em uma única plataforma, sem burocracia.
                 </p>
-                <a className="text-[#1a1a2e] text-5xl font-bold italic underline underline-offset-4 cursor-pointer hover:opacity-70 transition-opacity">
-                    Saiba mais
-                </a>
+                <button type="button" className={saibaMaisButtonClass} onClick={handleSaibaMaisClick}>
+                    <span className={`${saibaMaisLayerBaseClass} bg-[#5a2fd2]`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-75 bg-white`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-150 bg-[#0d84ff]`} />
+                    <span className="relative z-10">Saiba mais</span>
+                </button>
             </div>
 
             {/* Text 2 */}
@@ -351,9 +370,12 @@ export default function HorizontalSection() {
                 <p className="text-[#1a1a2e]/80 text-5xl font-bold leading-tight mb-4">
                     Cotação personalizada em minutos. Sem ligações, sem formulários intermináveis.
                 </p>
-                <a className="text-[#1a1a2e] text-5xl font-bold italic underline underline-offset-4 cursor-pointer hover:opacity-70 transition-opacity">
-                    Saiba mais
-                </a>
+                <button type="button" className={saibaMaisButtonClass} onClick={handleSaibaMaisClick}>
+                    <span className={`${saibaMaisLayerBaseClass} bg-[#5a2fd2]`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-75 bg-white`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-150 bg-[#0d84ff]`} />
+                    <span className="relative z-10">Saiba mais</span>
+                </button>
             </div>
 
             {/* Text 3 */}
@@ -361,9 +383,12 @@ export default function HorizontalSection() {
                 <p className="text-[#1a1a2e]/80 text-5xl font-bold leading-tight mb-4">
                     Proteção completa para você, sua família e seus bens — do jeito que precisa.
                 </p>
-                <a className="text-[#1a1a2e] text-5xl font-bold italic underline underline-offset-4 cursor-pointer hover:opacity-70 transition-opacity">
-                    Saiba mais
-                </a>
+                <button type="button" className={saibaMaisButtonClass} onClick={handleSaibaMaisClick}>
+                    <span className={`${saibaMaisLayerBaseClass} bg-[#5a2fd2]`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-75 bg-white`} />
+                    <span className={`${saibaMaisLayerBaseClass} delay-150 bg-[#0d84ff]`} />
+                    <span className="relative z-10">Saiba mais</span>
+                </button>
             </div>
 
             {/* CTA overlay */}

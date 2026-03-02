@@ -32,19 +32,27 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const deepLayerRef = useRef<HTMLDivElement>(null);
+  const midLayerRef = useRef<HTMLDivElement>(null);
+  const topLayerRef = useRef<HTMLDivElement>(null);
+  const layerRevealPx = 14;
 
   useEffect(() => {
     const panel = panelRef.current;
     const backdrop = backdropRef.current;
     const content = contentRef.current;
-    if (!panel || !backdrop || !content) return;
+    const deepLayer = deepLayerRef.current;
+    const midLayer = midLayerRef.current;
+    const topLayer = topLayerRef.current;
+    if (!panel || !backdrop || !content || !deepLayer || !midLayer || !topLayer) return;
 
     // Blur the page content behind the menu
     const pageContent = document.getElementById("page-content");
 
     if (isOpen) {
       gsap.set(backdrop, { display: "block", opacity: 0 });
-      gsap.set(panel, { display: "flex", yPercent: -100 });
+      gsap.set(panel, { display: "flex" });
+      gsap.set([deepLayer, midLayer, topLayer], { yPercent: -100 });
       gsap.set(content.querySelectorAll(".menu-nav-item"), { opacity: 0, y: 40 });
       gsap.set(content.querySelectorAll(".menu-social-item"), { opacity: 0, y: 15 });
       gsap.set(content.querySelectorAll(".menu-footer-item"), { opacity: 0 });
@@ -59,30 +67,40 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
         duration: 0.5,
         ease: "power2.out",
       }, 0)
-        .to(panel, {
+        .to(deepLayer, {
           yPercent: 0,
-          duration: 0.8,
+          duration: 0.95,
           ease: "power4.inOut",
         }, 0)
+        .to(midLayer, {
+          yPercent: 0,
+          duration: 0.92,
+          ease: "power4.inOut",
+        }, 0.08)
+        .to(topLayer, {
+          yPercent: 0,
+          duration: 0.88,
+          ease: "power4.inOut",
+        }, 0.16)
         .to(
           content.querySelector(".menu-close-btn"),
           { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
-          0.5
+          0.62
         )
         .to(
           content.querySelectorAll(".menu-nav-item"),
           { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power3.out" },
-          0.5
+          0.62
         )
         .to(
           content.querySelectorAll(".menu-social-item"),
           { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power3.out" },
-          0.55
+          0.67
         )
         .to(
           content.querySelectorAll(".menu-footer-item"),
           { opacity: 1, duration: 0.3, stagger: 0.05, ease: "power2.out" },
-          0.6
+          0.72
         );
 
       if (pageContent) {
@@ -109,11 +127,21 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
         { opacity: 0, y: -15, duration: 0.25, stagger: 0.02, ease: "power3.in" },
         0
       )
-        .to(panel, {
+        .to(topLayer, {
+          yPercent: -100,
+          duration: 0.56,
+          ease: "power4.inOut",
+        }, 0.1)
+        .to(midLayer, {
           yPercent: -100,
           duration: 0.6,
           ease: "power4.inOut",
-        }, 0.1)
+        }, 0.15)
+        .to(deepLayer, {
+          yPercent: -100,
+          duration: 0.64,
+          ease: "power4.inOut",
+        }, 0.2)
         .to(backdrop, {
           opacity: 0,
           duration: 0.4,
@@ -144,10 +172,34 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
       {/* Menu panel — 60vh with rounded bottom */}
       <div
         ref={panelRef}
-        className="fixed top-0 left-0 right-0 z-[9999] h-[60vh] bg-[#0d84ff] rounded-b-[40px] md:rounded-b-[60px] flex-col shadow-2xl"
+        className="fixed top-0 left-0 right-0 z-[9999] h-[60vh] flex-col shadow-2xl"
         style={{ display: "none" }}
       >
-        <div ref={contentRef} className="flex flex-col h-full">
+        {/* Deep layer: purple */}
+        <div
+          ref={deepLayerRef}
+          className="absolute inset-x-0 top-0 bottom-0 rounded-b-[40px] md:rounded-b-[60px] bg-[#5a2fd2]"
+        />
+
+        {/* Middle layer: white */}
+        <div
+          ref={midLayerRef}
+          className="absolute inset-x-0 top-0 rounded-b-[40px] md:rounded-b-[60px] bg-[#f7f5ef]"
+          style={{ bottom: `${layerRevealPx}px` }}
+        />
+
+        {/* Top layer: current blue */}
+        <div
+          ref={topLayerRef}
+          className="absolute inset-x-0 top-0 rounded-b-[40px] md:rounded-b-[60px] bg-[#0d84ff]"
+          style={{ bottom: `${layerRevealPx * 2}px` }}
+        />
+
+        <div
+          ref={contentRef}
+          className="relative z-10 flex flex-col h-full box-border"
+          style={{ paddingBottom: `${layerRevealPx * 2}px` }}
+        >
           {/* Top bar */}
           <div className="flex items-center justify-between px-6 py-8 md:px-10 md:py-10">
             <button
